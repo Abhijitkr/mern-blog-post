@@ -13,3 +13,24 @@ const fetchBlogList = async (req, res) => {
   }
   return res.status(200).json({ blogList });
 };
+
+const addBlog = async (req, res) => {
+  const { title, description } = req.body;
+  const currentDate = new Date();
+  const newlyCreatedBlog = new Blog({ title, description, date: currentDate });
+
+  try {
+    await newlyCreatedBlog.save();
+  } catch (error) {
+    console.log(error);
+  }
+  try {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    await newlyCreatedBlog.save(session);
+    session.commitTransaction();
+  } catch (error) {
+    return res.send(500).json({ message: error });
+  }
+  return res.status(200).json({ newlyCreatedBlog });
+};
