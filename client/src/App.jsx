@@ -1,9 +1,11 @@
-import { useContext } from "react";
-import { GlobalContext } from "./context/GlobalContext";
+import Header from "./components/Header";
 
 function App() {
-  const {test} = useContext(GlobalContext);
-  return <main className="text-3xl text-green-500">{test}</main>;
+  return (
+    <main className="container mx-auto bg-green-200 p-5">
+      <Header />
+    </main>
+  );
 }
 
 export default App;
