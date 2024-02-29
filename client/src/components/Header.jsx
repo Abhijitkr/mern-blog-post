@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
-    <section>
+    <section className="mb-10">
       <div className="flex justify-between">
         <h1 className="text-3xl font-semibold cursor-pointer">
           <Link to="/">MERN Blog</Link>
