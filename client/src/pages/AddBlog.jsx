@@ -1,19 +1,31 @@
-import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { GlobalContext } from "../context/GlobalContext";
 
 export default function AddBlog() {
-  const { formData, setFormData } = useContext(GlobalContext);
+  const { formData, setFormData, isEdit, setIsEdit } =
+    useContext(GlobalContext);
   const navigate = useNavigate();
+  const location = useLocation();
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const response = await fetch("http://localhost:8000/api/blogs/add", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+    const response = isEdit
+      ? await fetch(
+          `http://localhost:8000/api/blogs/update/${location.state.getBlog._id}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
+          }
+        )
+      : await fetch("http://localhost:8000/api/blogs/add", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
     if (response.ok) {
+      setIsEdit(false);
       setFormData({
         title: "",
         description: "",
@@ -21,6 +33,16 @@ export default function AddBlog() {
     }
     navigate("/");
   }
+
+  useEffect(() => {
+    if (location.state) {
+      setIsEdit(true);
+      setFormData({
+        title: location.state.getBlog.title,
+        description: location.state.getBlog.description,
+      });
+    }
+  }, []);
 
   return (
     <section>

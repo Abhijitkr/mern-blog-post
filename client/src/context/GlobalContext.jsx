@@ -5,6 +5,7 @@ export const GlobalContext = createContext(null);
 export default function GlobalState({ children }) {
   const [blogList, setBlogList] = useState(null);
   const [pending, setPending] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -19,6 +20,8 @@ export default function GlobalState({ children }) {
         setBlogList,
         pending,
         setPending,
+        isEdit,
+        setIsEdit,
       }}
     >
       {children}
